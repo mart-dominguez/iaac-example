@@ -1,0 +1,61 @@
+version: '2'
+services:
+    back01:
+        container_name: back01
+        build:
+          context: demo 
+          # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+          dockerfile: Dockerfile
+        image: demo:latest
+        ports:
+            - 9000:8080
+        networks:
+            - backend
+            - frontend
+    front01:
+        container_name: front01
+        build:
+            context: srv1
+            dockerfile: Dockerfile
+        image: srv1:latest
+        ports:
+            - 9001:8080
+        networks:
+            - frontend
+        links:
+            - back01:back01
+    front02:
+        container_name: front02
+        build:
+            context: srv2
+            dockerfile: Dockerfile
+        image: srv2:latest
+        ports:
+            - 9002:8080
+        networks:
+            - frontend
+        links:
+            - back01:back01
+    haproxy:
+        container_name: myproxy
+        build:
+            context: haproxy
+            dockerfile: Dockerfile
+        image: myproxy:latest
+        volumes:
+          - "~/Documents/myinfra/conf/haproxy:/etc/haproxy"
+          - "~/Documents/myinfra/logs/haproxy/:/dev/log"
+        links:
+            - back01:back01
+            - front01:front01
+            - front02:front02
+        ports:
+          - "80:80"
+          - "443:443"
+        networks:
+          - frontend
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge

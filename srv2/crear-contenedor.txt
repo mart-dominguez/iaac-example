@@ -1,0 +1,4 @@
+docker build --rm --tag md/echo-app .
+
+docker run -d -p 9300:9300  --name echo -it md/echo-app:latest
+
