@@ -1,6 +1,5 @@
 # ejemplo-iaac
-Ejemplo infraestructura as a code
-
+iaac example. The main goal it's run two node express container on frontend y one spring boot container in backend, using HAProxy as a gateway.
 
 Para que funcione ejecutar
 : en $demo .... mvn clean install (para que genere el jar)
